@@ -20,8 +20,7 @@
 
 - Front-end
 
-  - Javascript
-  - JQuery
+  - Jinja2
 
 - Deploy
   - AWS EC2
