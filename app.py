@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 
 client = MongoClient(os.environ.get('DB_URL'))
-db = client.dbsparta
+db = client.sparta
 
 @app.route('/')
 def home():
