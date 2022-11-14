@@ -1,11 +1,16 @@
 {% extends "base.html" %} {% block title %}Index{% endblock %} {% block head %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 <style type="text/css">
     .important {
         color: #336699;
     }
+
+    .h1 {
+        color: blue;
+    }
 </style>
 {% endblock %} {% block content %}
-<h1>Index</h1>
+<h1 class="h1">Index</h1>
 <p class="important">Welcome to my awesome homepage.</p>
 {% endblock %}
