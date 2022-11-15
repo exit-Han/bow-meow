@@ -88,7 +88,15 @@ def comment_get():
     comment_list = list(db.comment.find({}, {'_id': False}))
     return jsonify({'lists':comment_list})
 
+# 회원가입 페이지 렌더링
+@app.route("/auth/join")
+def join():
+    return render_template('join.html')
 
+# 로그인 페이지 렌더링
+@app.route("/auth/login")
+def login():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
