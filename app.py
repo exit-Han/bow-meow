@@ -22,6 +22,10 @@ def home():
 def detail():
     return render_template('details.html')
 
+@app.route('/registration')
+def regist():
+    return render_template('registration.html')
+
 # 댓글기능
 @app.route("/comments", methods=["POST"])
 def comment_post():
