@@ -20,41 +20,15 @@ db = client.sparta
 def home():
     return render_template('main.html')
 
-# 게시글 상세 페이지 렌더링
-@app.route('/details/<string:id>')
-def detail(id):
-    try:
-        post = db.posts.find_one({'_id': ObjectId(id)})
-        result = json.loads(json_util.dumps(post)) 
-    except:
-        return jsonify({'msg': '조회에 실패하였습니다.'})
-    else:
-        return render_template('details.html', data=result)
-
 
 # 등록 페이지 렌더링
 @app.route("/view/posts", methods=["GET"])
 def posts_get():
     return render_template('post.html')
-    
+
+
+# 게시글 등록    
 # [POST] /api/posts
-# {
-#   'id': post_id,
-#   'basicInfo': {
-#     'type': type,
-#     'date': date,
-#     'location': location,
-#     'tel': tel
-#   },
-#   'petInfo': {
-#     'type': type,
-#     'sex': sex,
-#     'age': age,
-#     'weight': weight,
-#     'feature': feature,
-#     'detail': detail
-#   }
-# }
 @app.route("/api/posts", methods=["POST"])
 def posts_post():
     params = request.get_json() # JSON형식으로 데이터를 받아온다
@@ -70,6 +44,7 @@ def posts_post():
         return jsonify({'msg': '등록이 완료되었습니다.'})
     
 
+# 게시글 리스트 조회
 # GET /api/posts
 @app.route("/api/posts", methods=["GET"])
 def posts_list_get():
@@ -78,6 +53,19 @@ def posts_list_get():
     post_list = json.loads(json_util.dumps(page)) 
     
     return post_list
+
+
+# 게시글 상세 조회
+# GET /api/posts/:id
+@app.route('/api/posts/<string:id>')
+def detail(id):
+    try:
+        post = db.posts.find_one({'_id': ObjectId(id)})
+        result = json.loads(json_util.dumps(post)) 
+    except:
+        return jsonify({'msg': '조회에 실패하였습니다.'})
+    else:
+        return render_template('details.html', data=result)
 
 
 # 댓글기능
@@ -94,10 +82,12 @@ def comment_post():
 
     return jsonify({'msg': '제보 완료!'})
 
+
 @app.route("/comments", methods=["GET"])
 def comment_get():
     comment_list = list(db.comment.find({}, {'_id': False}))
     return jsonify({'lists':comment_list})
+
 
 
 if __name__ == '__main__':

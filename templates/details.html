@@ -6,32 +6,7 @@ head %} {{ super() }}
     color: #336699;
   }
 </style>
-<script>
-  let basicInfo;
-  let petInfo;
 
-  $(document).ready(function () {
-    showDetail();
-  });
-
-  function showDetail() {
-    // window 경로에서 postid를 추출한다
-    const postId = window.location.pathname.split("/details/")[1].toString();
-    const path = `/api/posts/${postId}`;
-    const jsonData = { id: postId };
-    // 단일 조회 요청
-    $.ajax({
-      type: "GET",
-      url: path,
-      data: JSON.stringify(jsonData), //전송 데이터
-      success: function (response) {
-        // 응답이 정상이면 데이터를 담는다
-        basicInfo = response.basicInfo;
-        petInfo = response.petInfo;
-      },
-    });
-  }
-</script>
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
 <!--images-->
 <div

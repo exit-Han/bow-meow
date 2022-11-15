@@ -57,7 +57,7 @@ head %} {{ super() }}
     const target = event.currentTarget;
     const postId = target.querySelector("#postId").innerText;
 
-    window.location.href = `/details/${postId}`;
+    window.location.href = `/api/posts/${postId}`;
   }
 </script>
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
