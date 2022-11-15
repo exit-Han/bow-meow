@@ -1,0 +1,214 @@
+{% extends "base.html" %} {% block title %}제보하기{% endblock %} {% block head
+%} {{ super() }}
+
+<script>
+  $(document).ready(function () {
+    // 현재 날짜 구하기
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = ("0" + (today.getMonth() + 1)).slice(-2);
+    let day = ("0" + today.getDate()).slice(-2);
+    let reportDate = year + "-" + month + "-" + day;
+
+    $("#reportDate").val(reportDate);
+
+    // 등록 페이지 출력
+    show_posts();
+  });
+
+  function show_posts() {
+    $.ajax({
+      type: "GET",
+      url: "/view/posts",
+    });
+  }
+
+  function validation() {
+    // 연락처 형식 검증
+    const pattern = new RegExp("[0-9]{2,3}-[0-9]{3,4}-[0-9]{3,4}"); // 정규식 패턴
+    const res = pattern.test($("#telNum").val());
+
+    if (!res) {
+      alert("전화번호를 정확히 입력하여 주십시오.");
+      return false;
+    }
+    return true;
+  }
+
+  function save_post() {
+    // 입력값 검증
+    valid = validation();
+
+    if (valid && confirm("등록하시겠습니까?")) {
+      // [요청 json 데이터 선언]
+      const jsonData = {
+        basicInfo: {
+          type: $("#reportType option:selected").val(),
+          date: $("#reportDate").val(),
+          location: $("#reportLocation").val(),
+          tel: $("#telNum").val(),
+        },
+        petInfo: {
+          type: $("#animalType option:selected").val(),
+          typeDetail: $("#animalTypeDetail").val(),
+          sex: $("input[name=gender]:checked").val(),
+          age: $("#age").val(),
+          weight: $("#weight").val(),
+          details: $("#details").val(),
+        },
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "/api/posts",
+        data: JSON.stringify(jsonData), //전송 데이터
+        contentType: "application/json; charset=utf-8", //헤더의 Content-Type을 설정
+        success: function (response) {
+          alert(response["msg"]);
+        },
+      });
+    }
+  }
+</script>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <form class="row g-3">
+    <h3>기본정보</h3>
+    <div class="col-md-3">
+      <label for="reportType" class="form-label">구분</label>
+      <select
+        class="form-select is-invalid"
+        id="reportType"
+        aria-describedby="reportTypeFeedback"
+        required
+      >
+        <option selected disabled value="실종">실종</option>
+        <option value="보호">보호</option>
+        <option value="목격">목격</option>
+      </select>
+      <div id="reportTypeFeedback" class="invalid-feedback">
+        신고/제보 유형을 선택해주세요
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="reportDate" class="form-label">날짜</label>
+      <input type="text" class="form-control" id="reportDate" readonly />
+    </div>
+    <div class="col-md-3">
+      <label for="reportLocation" class="form-label">지역</label>
+      <input
+        type="text"
+        class="form-control is-invalid"
+        id="reportLocation"
+        aria-describedby="reportLocationFeedback"
+        required
+      />
+      <div id="reportLocationFeedback" class="invalid-feedback">
+        구체적인 장소를 적어주세요
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="telNum" class="form-label">연락처</label>
+      <input
+        type="tel"
+        class="form-control is-invalid"
+        id="telNum"
+        title="전화번호를 입력하세요."
+        pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{3,4}"
+        maxlength="13"
+        placeholder="01*-****-****"
+        aria-describedby="telNumFeedback"
+        required
+      />
+      <div id="telNumFeedbackFeedback" class="invalid-feedback">
+        연락처를 남겨주세요.
+      </div>
+    </div>
+    <hr />
+    <h3>동물정보</h3>
+    <div class="col-md-4">
+      <label for="animalType" class="form-label">구분</label>
+      <select
+        class="form-select is-invalid"
+        id="animalType"
+        aria-describedby="reportTypeFeedback"
+        required
+      >
+        <option selected disabled value="개">개</option>
+        <option value="고양이">고양이</option>
+        <option value="기타">기타</option>
+      </select>
+      <div id="reportTypeFeedback" class="invalid-feedback">
+        동물 유형을 선택해주세요
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="animalTypeDetail" class="form-label">품종</label>
+      <input
+        type="text"
+        class="form-control"
+        id="animalTypeDetail"
+        placeholder="품종을 아신다면 적어주세요"
+      />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">성별</label>
+      <fieldset>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="unknown"
+            value="미확인"
+            checked
+          />
+          <label class="form-check-label" for="unknown"> 미확인 </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="male"
+            value="수컷"
+          />
+          <label class="form-check-label" for="male"> 수컷 </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="female"
+            value="암컷"
+          />
+          <label class="form-check-label" for="female"> 암컷 </label>
+        </div>
+      </fieldset>
+    </div>
+    <div class="col-md-4">
+      <label for="age" class="form-label">나이</label>
+      <input type="number" class="form-control" id="age" />
+    </div>
+    <div class="col-md-4">
+      <label for="weight" class="form-label">몸무게</label>
+      <input type="number" class="form-control" id="weight" />
+    </div>
+    <div class="col-md-12">
+      <label for="details" class="form-label">상세내용</label>
+      <textarea
+        class="form-control"
+        id="details"
+        cols="30"
+        rows="5"
+        maxlength="200"
+      ></textarea>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" onclick="save_post()">등록하기</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
