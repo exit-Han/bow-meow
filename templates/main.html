@@ -1,11 +1,74 @@
-{% extends "base.html" %} {% block title %}Index{% endblock %} {% block head %}
+{% extends "base.html" %}
+{% block title %}메인 페이지{% endblock %}
+
+{% block head %}
 {{ super() }}
 <style type="text/css">
   .important {
     color: #336699;
   }
 </style>
-{% endblock %} {% block content %}
-<h1 class="h1">test</h1>
-<p class="important">Welcome to my awesome homepage.</p>
+{% endblock %}
+{% block content %}
+{% block navbar %}{% endblock %}
+<!--main banner-->
+<div class="main-banner">
+  <h1>Bow-Meow</h1>
+</div>
+
+<!--top description-->
+<div class="top-desc">
+  <h1>집을 잃은 강아지/고양이를 제보해주세요.</h1>
+  <h3>소중한 반려동물이 가정으로 돌아가도록 돕겠습니다.</h3>
+</div>
+
+<!--card section-->
+<div class="row row-cols-1 row-cols-md-4 g-4 m-1">
+  <div class="col">
+    <div class="card h-100">
+      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
+      <div class="card-body">
+        <h5 class="card-title">강아지 이름</h5>
+        <p class="card-text">설명</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
+      <div class="card-body">
+        <h5 class="card-title">강아지 이름</h5>
+        <p class="card-text">설명</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
+      <div class="card-body">
+        <h5 class="card-title">강아지 이름</h5>
+        <p class="card-text">설명</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
+      <div class="card-body">
+        <h5 class="card-title">강아지 이름</h5>
+        <p class="card-text">설명</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--report section-->
+<div class="card m-5">
+  <div class="card-body">
+    <h5 class="card-title">유기동물 신고/제보</h5>
+    <p class="card-text">잃어버린 반려동물의 정보를 입력해 주세요.</p>
+    <a href="/templates/registration.html" class="btn btn-success">신고/제보</a>
+  </div>
+</div>
+
 {% endblock %}
