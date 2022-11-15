@@ -4,13 +4,16 @@ import os
 from pymongo import MongoClient
 from bson import json_util, ObjectId
 import json
+import certifi
+
+ca = certifi.where()
 
 # load .env
 load_dotenv()
 
 app = Flask(__name__)
 
-client = MongoClient(os.environ.get('DB_URL'))
+client = MongoClient(os.environ.get('DB_URL'), tlsCAFile=ca)
 db = client.sparta
 
 @app.route('/')
@@ -82,6 +85,26 @@ def posts_read_get(id):
         return jsonify({'msg': '조회에 실패하였습니다.'})
     else:
         return jsonify(result)
+
+
+# 댓글기능
+@app.route("/comments", methods=["POST"])
+def comment_post():
+    nickname_receive = request.form['nickname_give']
+    comment_receive = request.form['comment_give']
+
+    doc = {
+        'nickname': nickname_receive,
+        'comment': comment_receive,
+    }
+    db.comment.insert_one(doc)
+
+    return jsonify({'msg': '제보 완료!'})
+
+@app.route("/comments", methods=["GET"])
+def comment_get():
+    comment_list = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'lists':comment_list})
 
 
 if __name__ == '__main__':
