@@ -1,3 +1,70 @@
-h1 {
-  color: brown;
+/*main page*/
+* {
+  font-family: "Gowun Dodum", sans-serif;
 }
+
+.top-desc {
+  width: 100%;
+  height: 200px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-banner {
+  margin: 10px auto 10px auto;
+  width: 100%;
+  height: 400px;
+
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("http://127.0.0.1:5000/static/img/puppy-gd9b77039c_640.jpg");
+  background-position: center;
+  background-size: cover;
+
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/*end of main page*/
+
+/*details page*/
+
+.table > tbody > tr > th {
+  text-align: center;
+
+  height: 50px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+  height: 50px;
+}
+
+.detailsh2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mycards {
+  width: 95%;
+  margin: 20px 20px 20px 20px;
+}
+
+/*end of details page*/
