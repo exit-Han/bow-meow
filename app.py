@@ -20,9 +20,17 @@ db = client.sparta
 def home():
     return render_template('main.html')
 
-@app.route('/details')
-def detail():
-    return render_template('details.html')
+# 게시글 상세 페이지 렌더링
+@app.route('/details/<string:id>')
+def detail(id):
+    try:
+        post = db.posts.find_one({'_id': ObjectId(id)})
+        result = json.loads(json_util.dumps(post)) 
+    except:
+        return jsonify({'msg': '조회에 실패하였습니다.'})
+    else:
+        return render_template('details.html', data=result)
+
 
 # 등록 페이지 렌더링
 @app.route("/view/posts", methods=["GET"])
@@ -70,21 +78,6 @@ def posts_list_get():
     post_list = json.loads(json_util.dumps(page)) 
     
     return post_list
-
-
-# GET /api/posts/:id
-@app.route("/api/posts/<string:id>", methods=["GET"])
-def posts_read_get(id):
-    params = request.get_json() 
-    id = params['id']  # 등록된 post의 id
-
-    try:
-        post = db.posts.find_one({'_id': ObjectId(id)})
-        result = json.loads(json_util.dumps(post)) 
-    except:
-        return jsonify({'msg': '조회에 실패하였습니다.'})
-    else:
-        return jsonify(result)
 
 
 # 댓글기능
