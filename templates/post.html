@@ -13,51 +13,77 @@
     $("#reportDate").val(reportDate);
 
     // 등록 페이지 출력
-    show_posts();
+    showPosts();
   });
 
-  function show_posts() {
+  function showPosts() {
     $.ajax({
       type: "GET",
       url: "/view/posts",
     });
   }
 
-  function validation() {
+  function validation(data) {
+    if (data.basicInfo.type == "") {
+      alert("신고/제보 유형을 선택해주세요.");
+      return false;
+    }
+
+    if (data.basicInfo.location == "") {
+      alert("구체적인 장소를 적어주세요.");
+      return false;
+    }
+
+    if (!telNumValidation()) {
+      alert("전화번호를 정확히 입력하여 주십시오.");
+      return false;
+    }
+
+    if (data.petInfo.type == "") {
+      alert("동물 유형을 선택해주세요.");
+      return false;
+    }
+
+    if (data.petInfo.typeDetail == "") {
+      alert("품종을 입력해주세요.");
+      return false;
+    }
+
+    return true;
+  }
+
+  function telNumValidation() {
     // 연락처 형식 검증
     const pattern = new RegExp("[0-9]{2,3}-[0-9]{3,4}-[0-9]{3,4}"); // 정규식 패턴
     const res = pattern.test($("#telNum").val());
 
-    if (!res) {
-      alert("전화번호를 정확히 입력하여 주십시오.");
-      return false;
-    }
-    return true;
+    return res;
   }
 
-  function save_post() {
+  function savePost() {
     // 입력값 검증
-    valid = validation();
+
+    // [요청 json 데이터 선언]
+    const jsonData = {
+      basicInfo: {
+        type: $("#reportType option:selected").val(),
+        date: $("#reportDate").val(),
+        location: $("#reportLocation").val(),
+        tel: $("#telNum").val(),
+      },
+      petInfo: {
+        type: $("#animalType option:selected").val(),
+        typeDetail: $("#animalTypeDetail").val(),
+        sex: $("input[name=gender]:checked").val(),
+        age: $("#age").val(),
+        weight: $("#weight").val(),
+        details: $("#details").val(),
+      },
+    };
+
+    valid = validation(jsonData);
 
     if (valid && confirm("등록하시겠습니까?")) {
-      // [요청 json 데이터 선언]
-      const jsonData = {
-        basicInfo: {
-          type: $("#reportType option:selected").val(),
-          date: $("#reportDate").val(),
-          location: $("#reportLocation").val(),
-          tel: $("#telNum").val(),
-        },
-        petInfo: {
-          type: $("#animalType option:selected").val(),
-          typeDetail: $("#animalTypeDetail").val(),
-          sex: $("input[name=gender]:checked").val(),
-          age: $("#age").val(),
-          weight: $("#weight").val(),
-          details: $("#details").val(),
-        },
-      };
-
       $.ajax({
         type: "POST",
         url: "/api/posts",
@@ -82,7 +108,8 @@
         aria-describedby="reportTypeFeedback"
         required
       >
-        <option selected disabled value="실종">실종</option>
+        <option selected disabled value="">선택</option>
+        <option value="실종">실종</option>
         <option value="보호">보호</option>
         <option value="목격">목격</option>
       </select>
@@ -134,7 +161,8 @@
         aria-describedby="reportTypeFeedback"
         required
       >
-        <option selected disabled value="개">개</option>
+        <option selected disabled value="">선택</option>
+        <option value="개">개</option>
         <option value="고양이">고양이</option>
         <option value="기타">기타</option>
       </select>
@@ -146,9 +174,10 @@
       <label for="animalTypeDetail" class="form-label">품종</label>
       <input
         type="text"
-        class="form-control"
+        class="form-control is-invalid"
         id="animalTypeDetail"
-        placeholder="품종을 아신다면 적어주세요"
+        placeholder="품종을 적어주세요"
+        required
       />
     </div>
     <div class="col-md-4">
@@ -206,7 +235,7 @@
       ></textarea>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" onclick="save_post()">등록하기</button>
+      <button class="btn btn-primary" onclick="savePost()">등록하기</button>
     </div>
   </form>
 </div>

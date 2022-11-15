@@ -1,16 +1,66 @@
-{% extends "base.html" %}
-{% block title %}메인 페이지{% endblock %}
-
-{% block head %}
-{{ super() }}
+{% extends "base.html" %} {% block title %}메인 페이지{% endblock %} {% block
+head %} {{ super() }}
 <style type="text/css">
   .important {
     color: #336699;
   }
+
+  #list-box > div {
+    cursor: pointer;
+  }
 </style>
-{% endblock %}
-{% block content %}
-{% block navbar %}{% endblock %}
+<script>
+  $(document).ready(function () {
+    showList();
+  });
+
+  // 게시글 리스트 조회
+  function showList() {
+    $.ajax({
+      type: "GET",
+      url: "/api/posts",
+      data: {},
+      success: function (response) {
+        const posts = response;
+        const list = $("#list-box");
+
+        for (const i in posts) {
+          const postId = posts[i]._id.$oid;
+          const element = `<div class="col">
+                 <div class="card h-100" onclick="goToPostDetail()">
+                   <img
+                     src="static/img/puppy-gd9b77039c_640.jpg"
+                     class="card-img-top"
+                     alt="test image"
+                   />
+                   <div class="card-body">
+                     <span id="postId" style="display:none;">${postId}</span>
+                     <h5 class="card-title">[${posts[i].basicInfo.type}] ${posts[i].petInfo.typeDetail}</h5>
+                     <p class="card-text">${posts[i].petInfo.sex} / ${posts[i].petInfo.type}</p>
+                   </div>
+                 </div>
+               </div>`;
+
+          list.append(element);
+        }
+      },
+    });
+  }
+
+  // 신고/제보 등록 페이지로 이동
+  function goToPostPage() {
+    window.location.href = "/view/posts";
+  }
+
+  // 리스트 상세 페이지로 이동
+  function goToPostDetail() {
+    const target = event.currentTarget;
+    const postId = target.querySelector("#postId").innerText;
+
+    window.location.href = `/api/posts/${postId}`;
+  }
+</script>
+{% endblock %} {% block content %} {% block navbar %}{% endblock %}
 <!--main banner-->
 <div class="main-banner">
   <h1>Bow-Meow</h1>
@@ -23,51 +73,14 @@
 </div>
 
 <!--card section-->
-<div class="row row-cols-1 row-cols-md-4 g-4 m-1">
-  <div class="col">
-    <div class="card h-100">
-      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
-      <div class="card-body">
-        <h5 class="card-title">강아지 이름</h5>
-        <p class="card-text">설명</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
-      <div class="card-body">
-        <h5 class="card-title">강아지 이름</h5>
-        <p class="card-text">설명</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
-      <div class="card-body">
-        <h5 class="card-title">강아지 이름</h5>
-        <p class="card-text">설명</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="static/img/puppy-gd9b77039c_640.jpg" class="card-img-top" alt="test image">
-      <div class="card-body">
-        <h5 class="card-title">강아지 이름</h5>
-        <p class="card-text">설명</p>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="row row-cols-1 row-cols-md-4 g-4 m-1" id="list-box"></div>
 
 <!--report section-->
 <div class="card m-5">
   <div class="card-body">
     <h5 class="card-title">유기동물 신고/제보</h5>
     <p class="card-text">잃어버린 반려동물의 정보를 입력해 주세요.</p>
-    <a href="/registration" class="btn btn-success">신고/제보</a>
+    <a class="btn btn-success" onclick="goToPostPage();">신고/제보</a>
   </div>
 </div>
 
