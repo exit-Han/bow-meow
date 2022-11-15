@@ -36,3 +36,35 @@
 }
 
 /*end of main page*/
+
+/*details page*/
+
+.table > tbody > tr > th {
+  text-align: center;
+
+  height: 50px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+  height: 50px;
+}
+
+.detailsh2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mycards {
+  width: 95%;
+  margin: 20px 20px 20px 20px;
+}
+
+/*end of details page*/
