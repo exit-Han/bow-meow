@@ -81,7 +81,7 @@
       },
     };
 
-    valid = validation(jsonData);
+    const valid = validation(jsonData);
 
     if (valid && confirm("등록하시겠습니까?")) {
       $.ajax({
@@ -91,6 +91,7 @@
         contentType: "application/json; charset=utf-8", //헤더의 Content-Type을 설정
         success: function (response) {
           alert(response["msg"]);
+          window.location.href = "/";
         },
       });
     }
@@ -98,7 +99,7 @@
 </script>
 {% endblock %} {% block content %}
 <div class="container-fluid">
-  <form class="row g-3">
+  <form class="row g-3" onsubmit="return false;">
     <h3>기본정보</h3>
     <div class="col-md-3">
       <label for="reportType" class="form-label">구분</label>
@@ -235,7 +236,9 @@
       ></textarea>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" onclick="savePost()">등록하기</button>
+      <button class="btn btn-primary" type="submit" onclick="savePost()">
+        등록하기
+      </button>
     </div>
   </form>
 </div>

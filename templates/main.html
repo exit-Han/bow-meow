@@ -10,42 +10,7 @@ head %} {{ super() }}
   }
 </style>
 <script>
-  $(document).ready(function () {
-    showList();
-  });
-
-  // 게시글 리스트 조회
-  function showList() {
-    $.ajax({
-      type: "GET",
-      url: "/api/posts",
-      data: {},
-      success: function (response) {
-        const posts = response;
-        const list = $("#list-box");
-
-        for (const i in posts) {
-          const postId = posts[i]._id.$oid;
-          const element = `<div class="col">
-                 <div class="card h-100" onclick="goToPostDetail()">
-                   <img
-                     src="static/img/puppy-gd9b77039c_640.jpg"
-                     class="card-img-top"
-                     alt="test image"
-                   />
-                   <div class="card-body">
-                     <span id="postId" style="display:none;">${postId}</span>
-                     <h5 class="card-title">[${posts[i].basicInfo.type}] ${posts[i].petInfo.typeDetail}</h5>
-                     <p class="card-text">${posts[i].petInfo.sex} / ${posts[i].petInfo.type}</p>
-                   </div>
-                 </div>
-               </div>`;
-
-          list.append(element);
-        }
-      },
-    });
-  }
+  $(document).ready(function () {});
 
   // 신고/제보 등록 페이지로 이동
   function goToPostPage() {
@@ -73,9 +38,43 @@ head %} {{ super() }}
 </div>
 
 <!--card section-->
-<div class="row row-cols-1 row-cols-md-4 g-4 m-1" id="list-box"></div>
-
-<!--report section-->
+<div class="row row-cols-1 row-cols-md-4 g-4 m-1" id="list-box">
+  <!-- 반복되는 구간 -->
+  {% for data in datas %}
+  <div class="col">
+    <div class="card h-100" onclick="goToPostDetail()">
+      <img
+        src="static/img/puppy-gd9b77039c_640.jpg"
+        class="card-img-top"
+        alt="test image"
+      />
+      <div class="card-body">
+        <span id="postId" style="display: none">{{ data['_id']['$oid'] }}</span>
+        <h5 class="card-title">
+          [{{ data.basicInfo.type }}] {{ data.petInfo.typeDetail}}
+        </h5>
+        <p class="card-text">{{data.petInfo.sex}} / {{data.petInfo.type}}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <!-- 반복되는 구간 끝 -->
+</div>
+<div>
+  <!-- 페이지네이션을 위한 코드 시작 -->
+  {% if block_start - 1 > 0 %}
+  <a href="{{url_for('posts_list_get', page=block_start - 1)}}">[이전]</a>
+  {% endif %} {% for i in range(block_start, block_end + 1)%}
+  <!-- 데이터가 존재하지 않는 페이지는 화면에 나타내지 않기 위한 조건문 -->
+  {% if i > last_page_num %} {% else %} {% if i == page %}
+  <b>{{ i }}</b>
+  {% else %}
+  <a href="{{url_for('posts_list_get', page=i)}}">{{ i }}</a>
+  {% endif %} {% endif %} {% endfor %} {% if block_end < last_page_num %}
+  <a href="{{url_for('posts_list_get', page=block_end + 1)}}">[다음]</a>
+  {% endif %}
+  <!-- 페이지네이션을 위한 코드 끝 -->
+</div>
 <div class="card m-5">
   <div class="card-body">
     <h5 class="card-title">유기동물 신고/제보</h5>
@@ -84,4 +83,5 @@ head %} {{ super() }}
   </div>
 </div>
 
+<!--report section-->
 {% endblock %}
