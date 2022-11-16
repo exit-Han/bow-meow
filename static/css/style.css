@@ -23,7 +23,7 @@
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
     ),
-    url("http://127.0.0.1:5000/static/img/puppy-gd9b77039c_640.jpg");
+    url("/static/img/puppy-gd9b77039c_640.jpg");
   background-position: center;
   background-size: cover;
 
@@ -73,7 +73,6 @@
 
 /*end of details page*/
 
-
 /*register page*/
 .important {
   color: #336699;
@@ -82,7 +81,6 @@
 .section {
   max-width: 550px;
   height: 500px;
-
 
   margin: 200px auto;
   border: 1px solid #ccc;
@@ -95,7 +93,6 @@
   vertical-align: middle;
   width: 350px;
   padding-top: 90px;
-  
 }
 
 .button {
@@ -104,11 +101,10 @@
 }
 #userpw {
   margin-right: 10px;
-
 }
 
 .is-hidden {
-  display: none!important;
+  display: none !important;
 }
 .field p {
   color: red;

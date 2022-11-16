@@ -9,7 +9,7 @@ import datetime
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response, abort
 from dotenv import load_dotenv
 import os 
 from pymongo import MongoClient
@@ -17,6 +17,7 @@ from bson import json_util, ObjectId
 import json
 import certifi
 from math import ceil
+import gridfs 
 
 ca = certifi.where()
 
@@ -140,6 +141,25 @@ def posts_post():
         return jsonify({'msg': '등록이 완료되었습니다.'})
 
 
+# 게시글 등록-이미지파일 저장    
+# [POST] /api/posts
+@app.route("/api/posts/fileUpload", methods=["POST"])
+def upload():
+    ## file upload ##
+    img = request.files['image']
+
+    ## GridFs를 통해 파일을 분할하여 DB에 저장하게 된다
+    fs = gridfs.GridFS(db)
+
+    ## 파일을 저장한다
+    fileObjectId = fs.put(img, filename = 'name')
+    fileId = json.loads(json_util.dumps(fileObjectId))['$oid']
+
+    print(fileId)
+    
+    return jsonify({'fileId': fileId})
+
+
 # 게시글 상세 조회
 # GET /api/posts/:id
 @app.route('/api/posts/<string:id>')
@@ -151,6 +171,7 @@ def detail(id):
         return jsonify({'msg': '조회에 실패하였습니다.'})
     else:
         return render_template('details.html', data=result)
+
 
 
 # 댓글기능
@@ -167,7 +188,7 @@ def comment_post():
     }
     db.comment.insert_one(doc)
 
-    return jsonify({'msg': '제보 완료!'})
+    return jsonify({'msg': '댓글 작성이 완료되었습니다.'})
 
 
 @app.route("/comments/<string:postId>", methods=["GET"])
