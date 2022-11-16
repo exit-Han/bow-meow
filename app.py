@@ -170,9 +170,9 @@ def comment_post():
     return jsonify({'msg': '제보 완료!'})
 
 
-@app.route("/comments", methods=["GET"])
-def comment_get():
-    comment_list = list(db.comment.find({},{'_id': False}))
+@app.route("/comments/<string:postId>", methods=["GET"])
+def comment_get(postId):
+    comment_list = list(db.comment.find({'postId': postId},{'_id': False}))
     return jsonify({'lists':comment_list})
 
 

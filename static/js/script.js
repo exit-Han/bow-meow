@@ -1,10 +1,12 @@
 /*details script*/
+const path = window.location.pathname;
+var post_id = path.split("/api/posts/")[1].toString();
+
 $(document).ready(function () {
-  show_comment();
+  show_comment(post_id);
 });
 
 function save_comment() {
-  let post_id = $("#object_id").val();
   let name = $("#name").val();
   let comment = $("#comment").val();
 
@@ -23,11 +25,11 @@ function save_comment() {
   });
 }
 
-function show_comment() {
+function show_comment(postId) {
   $.ajax({
     type: "GET",
-    url: "/comments",
-    data: {},
+    url: `/comments/${postId}`,
+    data: { postId: postId },
     success: function (response) {
       let rows = response["lists"];
       for (let i = 0; i < rows.length; i++) {
