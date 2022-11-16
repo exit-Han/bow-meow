@@ -71,10 +71,12 @@ def detail(id):
 # 댓글기능
 @app.route("/comments", methods=["POST"])
 def comment_post():
+    postId_receive = request.form['postId_give']
     nickname_receive = request.form['nickname_give']
     comment_receive = request.form['comment_give']
 
     doc = {
+        'postId': postId_receive,
         'nickname': nickname_receive,
         'comment': comment_receive,
     }
@@ -85,7 +87,7 @@ def comment_post():
 
 @app.route("/comments", methods=["GET"])
 def comment_get():
-    comment_list = list(db.comment.find({}, {'_id': False}))
+    comment_list = list(db.comment.find({},{'_id': False}))
     return jsonify({'lists':comment_list})
 
 # 회원가입 페이지 렌더링
@@ -97,6 +99,7 @@ def join():
 @app.route("/auth/login")
 def login():
     return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

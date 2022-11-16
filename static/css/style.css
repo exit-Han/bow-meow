@@ -67,4 +67,8 @@
   margin: 20px 20px 20px 20px;
 }
 
+.objectId {
+  visibility: hidden;
+}
+
 /*end of details page*/
