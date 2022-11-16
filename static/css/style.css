@@ -68,3 +68,48 @@
 }
 
 /*end of details page*/
+
+
+/*register page*/
+.important {
+  color: #336699;
+}
+
+.section {
+  max-width: 550px;
+  height: 500px;
+
+
+  margin: 200px auto;
+  border: 1px solid #ccc;
+
+  padding: 0px;
+}
+
+.container {
+  display: inline-block;
+  vertical-align: middle;
+  width: 350px;
+  padding-top: 90px;
+  
+}
+
+.button {
+  margin: auto;
+  width: 170px;
+}
+#userpw {
+  margin-right: 10px;
+
+}
+
+.is-hidden {
+  display: none!important;
+}
+.field p {
+  color: red;
+  font-size: 12px;
+  padding-top: 10px;
+}
+
+/*end of register page*/
